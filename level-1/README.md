@@ -18,13 +18,31 @@
 
 ## 실행 방법
 
+### 1. 패키지 설치
+
 ```bash
 npm install
+```
+
+### 2. json-server 실행
+
+```bash
 npm start
 ```
 
-브라우저에서 `index.html`을 열어 앱을 확인하세요.
-json-server는 `http://localhost:4000/expenses`에서 실행됩니다.
+> 위 명령은 내부적으로 `npx json-server --watch db.json --port 4000`을 실행합니다.
+> 직접 실행하고 싶다면 아래 명령을 사용해도 됩니다:
+>
+> ```bash
+> npx json-server --watch db.json --port 4000
+> ```
+
+서버가 실행되면 `http://localhost:4000/expenses`에서 API를 확인할 수 있습니다.
+
+### 3. 앱 실행
+
+브라우저에서 `index.html` 파일을 열어 앱을 확인하세요.
+> **주의**: json-server가 실행 중인 상태에서 앱을 사용해야 합니다. 터미널을 하나 더 열거나, 서버를 백그라운드로 실행하세요.
 
 ## 구현 요구사항
 

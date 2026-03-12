@@ -130,6 +130,7 @@
 ### 14. localStorage - 사용자 설정 저장
 
 브라우저를 닫았다 열어도 유지되어야 하는 설정을 `localStorage`에 저장하세요:
+
 - 선택한 필터 상태 (카테고리, 타입)
 - 정렬 기준 (금액순/날짜순, 오름차순/내림차순)
 - 페이지 재방문 시 저장된 설정을 불러와서 자동 적용
@@ -137,6 +138,7 @@
 ### 15. sessionStorage - 폼 임시 저장
 
 탭이 열려 있는 동안만 유지되는 데이터를 `sessionStorage`에 저장하세요:
+
 - 폼에 작성 중인 데이터를 `input` 이벤트마다 `sessionStorage`에 저장
 - 실수로 새로고침해도 작성 중이던 폼 데이터가 복원됨
 - 폼 제출(submit) 성공 시 `sessionStorage`에서 해당 데이터 삭제
@@ -164,12 +166,14 @@ js/
 ### Map 또는 Set 활용
 
 `Map` 또는 `Set`을 최소 1곳 이상 활용하세요. 예시:
+
 - 카테고리 목록 관리에 `Set` 사용
 - 월별 데이터 캐싱에 `Map` 사용
 
 ### 순수 함수
 
 유틸리티 함수는 순수 함수로 작성하세요:
+
 - 외부 상태를 변경하지 않음
 - 같은 입력에 항상 같은 출력
 - 예: 통계 계산, 필터링, 정렬, debounce 함수
@@ -188,15 +192,50 @@ js/
 - 클로저 (debounce 구현)
 - `setTimeout`, `clearTimeout`
 
-## npm 활용
+## npm 및 json-server 활용
 
-- `package.json` 직접 작성 (`npm init` 활용 가능)
-- `json-server`를 dependencies에 직접 설치
-- `scripts`에 json-server 실행 명령 등록
+### 프로젝트 초기화 및 json-server 설치
+
+```bash
+# package.json 생성
+npm init -y
+
+# json-server 설치
+npm install json-server
+```
+
+### package.json scripts 설정
+
+`package.json`의 `scripts`에 json-server 실행 명령을 등록하세요:
+
+```json
+{
+  "scripts": {
+    "start": "npx json-server --watch db.json --port 4000"
+  }
+}
+```
+
+### 서버 실행
+
+```bash
+# npm scripts로 실행
+npm start
+
+# 또는 직접 실행
+npx json-server --watch db.json --port 4000
+```
+
+서버가 실행되면 아래 주소에서 API를 확인할 수 있습니다:
+- `http://localhost:4000/transactions`
+- `http://localhost:4000/categories`
+
+> **주의**: json-server가 실행 중인 상태에서 앱을 사용해야 합니다. 터미널을 하나 더 열거나, 서버를 백그라운드로 실행하세요.
 
 ## README.md 작성
 
 프로젝트 완성 후 `README.md`를 작성하세요:
+
 - 프로젝트 설명 (어떤 앱인지)
 - 실행 방법 (설치, 서버 실행, 브라우저 열기)
 - 주요 기능 목록
@@ -215,27 +254,27 @@ js/
 
 ## API 엔드포인트
 
-| 메서드 | URL | 설명 |
-|--------|-----|------|
-| GET | `http://localhost:4000/transactions` | 전체 내역 조회 |
-| GET | `http://localhost:4000/categories` | 카테고리 목록 조회 |
-| POST | `http://localhost:4000/transactions` | 내역 추가 |
-| PATCH | `http://localhost:4000/transactions/:id` | 내역 수정 |
-| DELETE | `http://localhost:4000/transactions/:id` | 내역 삭제 |
+| 메서드 | URL                                      | 설명               |
+| ------ | ---------------------------------------- | ------------------ |
+| GET    | `http://localhost:4000/transactions`     | 전체 내역 조회     |
+| GET    | `http://localhost:4000/categories`       | 카테고리 목록 조회 |
+| POST   | `http://localhost:4000/transactions`     | 내역 추가          |
+| PATCH  | `http://localhost:4000/transactions/:id` | 내역 수정          |
+| DELETE | `http://localhost:4000/transactions/:id` | 내역 삭제          |
 
 ## 힌트
 
 - **Promise.all 초기 로딩**:
   ```js
   const [transactions, categories] = await Promise.all([
-    fetch('http://localhost:4000/transactions').then(res => res.json()),
-    fetch('http://localhost:4000/categories').then(res => res.json())
+    fetch("http://localhost:4000/transactions").then((res) => res.json()),
+    fetch("http://localhost:4000/categories").then((res) => res.json()),
   ]);
   ```
 - **Promise.all 일괄 삭제**:
   ```js
-  const deletePromises = selectedIds.map(id =>
-    fetch(`http://localhost:4000/transactions/${id}`, { method: 'DELETE' })
+  const deletePromises = selectedIds.map((id) =>
+    fetch(`http://localhost:4000/transactions/${id}`, { method: "DELETE" }),
   );
   await Promise.all(deletePromises);
   ```
@@ -252,21 +291,29 @@ js/
 - **localStorage 사용**:
   ```js
   // 저장
-  localStorage.setItem('filterSettings', JSON.stringify({ category: '식비', sort: 'date' }));
+  localStorage.setItem(
+    "filterSettings",
+    JSON.stringify({ category: "식비", sort: "date" }),
+  );
   // 불러오기
-  const settings = JSON.parse(localStorage.getItem('filterSettings'));
+  const settings = JSON.parse(localStorage.getItem("filterSettings"));
   ```
 - **sessionStorage 폼 임시 저장**:
   ```js
   // input 이벤트마다 저장
-  formInput.addEventListener('input', () => {
-    sessionStorage.setItem('formDraft', JSON.stringify({ date, category, amount, description }));
+  formInput.addEventListener("input", () => {
+    sessionStorage.setItem(
+      "formDraft",
+      JSON.stringify({ date, category, amount, description }),
+    );
   });
   // 페이지 로드 시 복원
-  const draft = JSON.parse(sessionStorage.getItem('formDraft'));
-  if (draft) { /* 폼에 값 채우기 */ }
+  const draft = JSON.parse(sessionStorage.getItem("formDraft"));
+  if (draft) {
+    /* 폼에 값 채우기 */
+  }
   // submit 성공 후 삭제
-  sessionStorage.removeItem('formDraft');
+  sessionStorage.removeItem("formDraft");
   ```
 - 월 추출: `new Date(date).getMonth()` (0~11 반환)
 - `Set`으로 고유 카테고리 목록 관리: `new Set(transactions.map(t => t.category))`
