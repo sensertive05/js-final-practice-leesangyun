@@ -1,0 +1,14 @@
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* TODO: 필요한 스타일을 직접 추가하세요 */
