@@ -8,7 +8,13 @@ const BASE_URL = 'http://localhost:4000/expenses';
  * @returns {Promise<Array>} 지출 목록 배열
  */
 export async function getExpenses() {
-  // TODO: fetch를 사용하여 GET 요청을 보내고, 결과를 반환하세요
+  const response = await fetch(BASE_URL);
+
+  if (!response.ok) {
+    throw new Error('지출 목록을 불러오지 못했습니다.');
+  }
+
+  return await response.json();
 }
 
 /**
@@ -21,7 +27,19 @@ export async function getExpenses() {
  * @returns {Promise<Object>} 생성된 지출 객체
  */
 export async function createExpense(expenseData) {
-  // TODO: fetch를 사용하여 POST 요청을 보내고, 결과를 반환하세요
+  const response = await fetch(BASE_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(expenseData),
+  });
+
+  if (!response.ok) {
+    throw new Error('지출을 추가하지 못했습니다.');
+  }
+
+  return await response.json();
 }
 
 /**
@@ -33,5 +51,13 @@ export async function createExpense(expenseData) {
  * @returns {Promise<Object>} 삭제 응답
  */
 export async function deleteExpense(id) {
-  // TODO: fetch를 사용하여 DELETE 요청을 보내고, 결과를 반환하세요
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('지출을 삭제하지 못했습니다.');
+  }
+
+  return await response.json();
 }
